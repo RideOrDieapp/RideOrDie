@@ -18,7 +18,7 @@
     },
     {
       "name": "Ryan Adams",
-      "email": ""
+      "email": "rnadams@ncsu.edu"
     }
   ],
   "main": "./server.js",
