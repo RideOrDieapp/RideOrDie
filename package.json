@@ -14,11 +14,11 @@
     },
     {
       "name": "Taylor Griffin",
-      "email": ""
+      "email": "tsgriffi@ncsu.edu"
     },
     {
       "name": "Ryan Adams",
-      "email": ""
+      "email": "rnadams@ncsu.edu"
     }
   ],
   "main": "./server.js",
