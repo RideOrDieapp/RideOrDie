@@ -1,12 +1,14 @@
 module.exports = function (app) {
-
-
     app.get('/', function (req, res) {
         res.render('layout');
     });
 
     app.get('/Applications/:appName', function (req, res) {
         res.render('layout');
+    });
+
+    app.get('/partials/Index', function (req, res) {
+        res.render("Index");
     });
 
     app.get('/partials/:name', function (req, res) {

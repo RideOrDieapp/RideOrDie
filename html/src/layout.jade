@@ -32,12 +32,24 @@ html(lang="en")
         //-- Moment version 2.8.3 --
         script(src="/scripts/moment.min.js")
 
+        //Google Maps
+        script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoDe-2LqilgTaomx1QyDvCvWQJsiQYukM")
+
+        //lodash for google maps
+        script(src="/scripts/lodash.min.js")
+
+
         //Angular
         script(src="/scripts/angular.min.js")
         script(src="/scripts/angular-route.min.js")
+        script(src="/scripts/angular-google-maps.min.js")
         script(src="/angular/Routes.js")
 
-    body(ng-app="RideOrDie")
+
+
+
+
+body(ng-app="RideOrDie")
         div#wrapper
             //-- Navigation --
             nav.navbar.navbar-default.navbar-static-top(role="navigation", style="margin-bottom: 0")
@@ -48,9 +60,7 @@ html(lang="en")
                 //-- end .navbar-header --
 
 
-
-            div#page-wrapper
-                ng-view
+            ng-view
 
 
             //-- end #page-wrapper --

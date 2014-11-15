@@ -1,4 +1,4 @@
-var OCEM = angular.module('RideOrDie', ['ngRoute', 'ui.bootstrap', 'ui.mask']);
+var OCEM = angular.module('RideOrDie', ['ngRoute', 'ui.bootstrap', 'ui.mask', 'google-maps'.ns()]);
 
 OCEM.controller('indexCtlr', ['$scope','$http', indexCtrl]);
 
@@ -34,5 +34,6 @@ OCEM.config(['$httpProvider', function ($httpProvider) {
 
 
 function indexCtrl($scope, $http) {
-    console.log("index controller");
+    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
 }
+

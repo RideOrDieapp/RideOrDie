@@ -13,6 +13,8 @@
     src: url("/fonts/AvenirLTStd-Light.otf") format("opentype");
 }
 
+.angular-google-map-container { height: 100%; }
+
 .iconImage {
     margin-right:  15px;
 }
