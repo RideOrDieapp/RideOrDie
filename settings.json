@@ -1,0 +1,19 @@
+{
+  "database": {
+    "MONGOHQ_URL": "mongodb://heroku:MS58dgjXbMD3nXb_VDBZRpDiUyuKqFwoZDCTmX_WsJtEWRPblCfG7oSgmK6sKyNhGu1KaV57QQViPP-eN_OafQ@kahana.mongohq.com:10070/app28953073"
+  },
+  "testdatabase": {
+     "MONGOHQ_URL": "mongodb://heroku:IZlkSuu7bFo2_xlFTto_yvUS-Ur5F_HV0avcwg-ChPLQEbMnT5Bsi92mQAWcHViPChhhX7QVa8_9yg_ZSuOzFw@linus.mongohq.com:10037/app30673447"
+  },
+  "twilio": {
+    "AccountSID": "AC8268d4c975177dbecd44f9e974afb62a",
+    "AuthToken": "8150fbe1cd46ce1474f0ec338938f484"
+  },
+  "Google": {
+    "ClientID": "486129231191-i6s2tdocugrhaf0s48ebmd7cnnp3aj0b.apps.googleusercontent.com",
+    "ClientSecret": "EmK-m-1ChCbIauOsWNOGQCg-"
+  },
+  "host": {
+    "headURL": "http://on-call-escalation-manager.herokuapp.com"
+  }
+}

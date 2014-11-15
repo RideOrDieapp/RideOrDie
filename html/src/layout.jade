@@ -1,0 +1,72 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        meta(name="description" content="")
+        meta(name="author" content="")
+        link(rel="shortcut icon", href="/images/favicon.png", type="image/png")
+
+        - var title = siteTitle || "Ride or Die"
+        title #{title}
+
+        //-- Bootstrap Core CSS --
+        link(href="/stylesheets/bootstrap.css", rel="stylesheet")
+
+        //-- MetisMenu CSS --
+        link(href="/stylesheets/plugins/metisMenu/metisMenu.min.css", rel="stylesheet")
+
+        //-- Custom CSS --
+        link(href="/stylesheets/sb-admin-2.css", rel="stylesheet")
+
+        //-- Other CSS --
+        link(href="/stylesheets/Styles.css", rel="stylesheet")
+
+        //-- Custom Fonts --
+        link(href="/font-awesome-4.1.0/css/font-awesome.min.css", rel="stylesheet", type="text/css")
+
+        //-- jQuery Version 1.11.0 --
+        script(src="/scripts/jquery-1.11.1.min.js")
+
+        //-- Moment version 2.8.3 --
+        script(src="/scripts/moment.min.js")
+
+        //Angular
+        script(src="/scripts/angular.min.js")
+        script(src="/scripts/angular-route.min.js")
+        script(src="/angular/Routes.js")
+
+    body(ng-app="RideOrDie")
+        div#wrapper
+            //-- Navigation --
+            nav.navbar.navbar-default.navbar-static-top(role="navigation", style="margin-bottom: 0")
+                div.navbar-header
+                    a.navbar-brand(href="/")
+                        img.iconImage(src="/images/Bandwidth-75.png")
+                        | #{title}
+                //-- end .navbar-header --
+
+
+
+            div#page-wrapper
+                ng-view
+
+
+            //-- end #page-wrapper --
+        //-- end #wrapper --
+
+        //-- Bootstrap Core JavaScript --
+        script(src="/scripts/bootstrap.min.js")
+
+        //-- Bootstrap Angular
+        script(src="/scripts/ui-bootstrap-0.11.2.min.js")
+
+        //-- UI Utils
+        script(src="/scripts/ui-utils.js")
+
+        //-- Metis Menu Plugin JavaScript --
+        script(src="/scripts/plugins/metisMenu/metisMenu.min.js")
+
+        //-- Custom Theme JavaScript --
+        script(src="/scripts/sb-admin-2.js")
