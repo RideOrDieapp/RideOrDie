@@ -35,20 +35,23 @@ OCEM.config(['$httpProvider', function ($httpProvider) {
 
 function indexCtrl($scope, $http, $firebase) {
     $scope.map = { center: { latitude: 35.9886, longitude: -78.9072 }, zoom: 12 };
+    $scope.dataSet = [];
+    var ref = new Firebase("https://rideordie.firebaseio.com/");
+    ref.once('value', function(snapshot){
+        var dataarray = snapshot.val();
+        dataarray.forEach(function(item){
+            if(item.city.toString() == 'Durham'){
+                $scope.dataSet.push(item);
+            }
+        });
+        console.log($scope.dataSet);
+    });
 
-//    var ref = new Firebase("https://rideordie.firebaseio.com/");
-//    var Data = ref.child('data').orderByChild("19").equalTo("Durham").once("value", function (snapshot){
-//        console.log(snapshot.val());
-//    });
-//
 
 
 
-//    var myData = ref.child('data/0');
-//    var theData = myData.once('value', function(snapshot){
-//        console.log(snapshot.val());
-//    });
-//
+
+
 //    var dataRef = ref.child('data');
 //    dataRef.once('child_added', function(snapshot){
 //        //console.log(snapshot.val());
