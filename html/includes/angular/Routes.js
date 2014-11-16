@@ -64,17 +64,23 @@ function indexCtrl($scope, $http, $firebase) {
                             dataarray.forEach(function(item){
                                 if(item.city.toString() == 'Durham') {
                                     map.data.forEach(function(feature) {
+
+                                        var featureFound = false;
                                         feature.getGeometry().getArray().forEach(function(coord) {
                                             var dist = calcCrow(coord.lat(), coord.lng(), item.location.latitude, item.location.longitude);
-                                            if (dist < 0.04572) { //150 feet
+                                            if (dist < 0.04572 && !featureFound) { //150 feet
+                                                featureFound = true;
                                                 console.log("Coord: " + coord.lat() + ", " + coord.lng() + "Coord2: " + item.location.latitude + ", " + item.location.longitude +" - Distance: " + dist);
                                                 feature.setProperty("severityCount", parseFloat(feature.getProperty('severityCount'))+1);
                                                 if (parseFloat(feature.getProperty('severityCount')) > $scope.highestWrecks) {
                                                     $scope.highestWrecks = parseFloat(feature.getProperty('severityCount'));
+                                                    $scope.highestWreckLoc = item;
                                                 }
                                                 $scope.dataSet.push(item);
                                             }
                                         });
+
+
                                     });
                                 }
                             });
@@ -84,6 +90,7 @@ function indexCtrl($scope, $http, $firebase) {
                             });
                             $scope.$apply();
                             console.log($scope.highestWrecks);
+                            console.log($scope.highestWreckLoc);
                             console.log($scope.dataSet);
                         });
 
@@ -125,7 +132,7 @@ function updateMap(mapInstance) {
 
 function getColor(value){
     //value from 0 to 1
-    var hue=(((1-value)*120)-40);
+    var hue=(((1-value)*120));
     if (hue < 0)
         hue = 0;
     return ["hsl(",hue,",100%,50%)"].join("");
