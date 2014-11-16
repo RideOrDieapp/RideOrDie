@@ -91,7 +91,14 @@ function indexCtrl($scope, $http, $firebase) {
                             });
                             map.data.forEach(function(feature) {
                                 feature.setProperty("severity", parseFloat((feature.getProperty('severityCount'))/$scope.highestWrecks));
+                            });
 
+                            map.data.addListener('click', function(event){
+                                var routeInfo = $('#route_info');
+                                routeInfo.dialog(); // Initialize dialog plugin
+                                $('#wreck_count').text(event.feature.getProperty('severityCount'));
+                                //$('#speed_limit').text(event.feature
+                                console.log(event.feature);
                             });
                             $scope.$apply();
                             console.log($scope.highestWrecks);

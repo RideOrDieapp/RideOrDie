@@ -12,3 +12,11 @@ div#pleaseWaitDialog.modal.fade(data-backdrop="static" data-keyboard="false")
         div.modal-body
             div.progress
                 div.progress-bar.progress-bar-striped.active(role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%")
+div#route_info
+    table(style='width: 100%; border: solid; border-collapse: collapse;')
+        tr
+            td(style="border: solid; width: 50%; padding-left: 5px;") Wrecks:
+            td#wreck_count(style="border: solid; width: 50%; padding-left: 5px;")
+        tr
+            td(style="border: solid; width: 50%; padding-left: 5px;") Speed Limit:
+            td#speed_limit(style="border: solid; width: 50%; padding-left: 5px;")
