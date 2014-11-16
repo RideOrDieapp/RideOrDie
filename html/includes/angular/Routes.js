@@ -1,6 +1,6 @@
-var OCEM = angular.module('RideOrDie', ['ngRoute', 'ui.bootstrap', 'ui.mask', 'google-maps'.ns()]);
+var OCEM = angular.module('RideOrDie', ['ngRoute', 'ui.bootstrap', 'ui.mask','firebase', 'google-maps'.ns()]);
 
-OCEM.controller('indexCtlr', ['$scope','$http', indexCtrl]);
+OCEM.controller('indexCtlr', ['$scope','$http','$firebase', indexCtrl]);
 
 
 OCEM.config(['$routeProvider', '$locationProvider',
@@ -33,7 +33,26 @@ OCEM.config(['$httpProvider', function ($httpProvider) {
 }])
 
 
-function indexCtrl($scope, $http) {
+function indexCtrl($scope, $http, $firebase) {
     $scope.map = { center: { latitude: 35.9886, longitude: -78.9072 }, zoom: 12 };
+
+//    var ref = new Firebase("https://rideordie.firebaseio.com/");
+//    var Data = ref.child('data').orderByChild("19").equalTo("Durham").once("value", function (snapshot){
+//        console.log(snapshot.val());
+//    });
+
+
+
+
+//    var myData = ref.child('data/0');
+//    var theData = myData.once('value', function(snapshot){
+//        console.log(snapshot.val());
+//    });
+//
+//    var dataRef = ref.child('data');
+//    dataRef.once('child_added', function(snapshot){
+//        //console.log(snapshot.val());
+//    });
+    //$scope.data = theData;
 }
 
