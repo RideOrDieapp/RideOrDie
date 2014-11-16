@@ -34,6 +34,6 @@ OCEM.config(['$httpProvider', function ($httpProvider) {
 
 
 function indexCtrl($scope, $http) {
-    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+    $scope.map = { center: { latitude: 35.9886, longitude: -78.9072 }, zoom: 12 };
 }
 
