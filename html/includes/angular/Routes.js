@@ -40,7 +40,7 @@ function indexCtrl($scope, $http, $firebase) {
 //    var Data = ref.child('data').orderByChild("19").equalTo("Durham").once("value", function (snapshot){
 //        console.log(snapshot.val());
 //    });
-
+//
 
 
 
