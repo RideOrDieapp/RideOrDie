@@ -199,3 +199,9 @@
 .evenSegment {
     background-color: #f7f7f7;
 }
+
+.hover:hover {
+    content: url(/images/RIDEORDIE.PNG); /* no need for qoutes */
+    display: block;
+}
+}
