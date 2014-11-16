@@ -1,2 +1,3 @@
 div#map_canvas
-    <ui-gmap-google-map events='map.events' center='map.center' zoom='map.zoom'></ui-gmap-google-map>
+    ui-gmap-google-map(events='map.events' center='map.center' zoom='map.zoom')
+        ui-gmap-marker(ng-repeat="marker in dataSet" idKey='marker.objectid' coords="marker.location")
