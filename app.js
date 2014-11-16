@@ -28,6 +28,6 @@ app.configure('development', function(){
     app.use(express.errorHandler());
 });
 
-require('./routes/Gui.js')(app);
+require('./routes/GUI.js')(app);
 
 module.exports = app;
