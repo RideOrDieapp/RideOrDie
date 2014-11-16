@@ -34,10 +34,13 @@ OCEM.config(['$httpProvider', function ($httpProvider) {
 
 
 function indexCtrl($scope, $http, $firebase) {
+    $scope.marker = false;
     $scope.url = '/data/durham-bike-lanes.geojson';
     var addedListener = false;
     var wasLoaded = false;
     var count = 0;
+
+    $('#pleaseWaitDialog').modal('show');
 
     $scope.map = {
         center: {latitude: 35.9886, longitude: -78.9072},
@@ -54,9 +57,11 @@ function indexCtrl($scope, $http, $firebase) {
                         });
                     }
                     if (!wasLoaded) {
+                        $('#modalStatus').text("Loading Bike Routes...");
                         map.data.loadGeoJson($scope.url);
 
                         $scope.dataSet = [];
+                        $('#modalStatus').text("Retrieving & Processing Crash Data...");
                         var ref = new Firebase("https://rideordie.firebaseio.com/");
                         ref.once('value', function(snapshot){
                             var dataarray = snapshot.val();
@@ -70,7 +75,7 @@ function indexCtrl($scope, $http, $firebase) {
                                             var dist = calcCrow(coord.lat(), coord.lng(), item.location.latitude, item.location.longitude);
                                             if (dist < 0.04572 && !featureFound) { //150 feet
                                                 featureFound = true;
-                                                console.log("Coord: " + coord.lat() + ", " + coord.lng() + "Coord2: " + item.location.latitude + ", " + item.location.longitude +" - Distance: " + dist);
+                                                //console.log("Coord: " + coord.lat() + ", " + coord.lng() + "Coord2: " + item.location.latitude + ", " + item.location.longitude +" - Distance: " + dist);
                                                 feature.setProperty("severityCount", parseFloat(feature.getProperty('severityCount'))+1);
                                                 if (parseFloat(feature.getProperty('severityCount')) > $scope.highestWrecks) {
                                                     $scope.highestWrecks = parseFloat(feature.getProperty('severityCount'));
@@ -92,6 +97,7 @@ function indexCtrl($scope, $http, $firebase) {
                             console.log($scope.highestWrecks);
                             console.log($scope.highestWreckLoc);
                             console.log($scope.dataSet);
+                            $('#pleaseWaitDialog').modal('hide');
                         });
 
 
@@ -102,6 +108,7 @@ function indexCtrl($scope, $http, $firebase) {
             }
         }
     }
+    $('#modalStatus').text("Loading Google Maps...");
 }
 
 function updateMap(mapInstance) {

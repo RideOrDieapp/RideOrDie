@@ -5480,6 +5480,9 @@ button.close {
 }
 @media (min-width: 768px) {
   .modal-dialog {
+    background-color: #f5f5f5;
+    border: 1px solid #888888;
+    border-radius: 5px;
     width: 600px;
     margin: 30px auto;
   }
