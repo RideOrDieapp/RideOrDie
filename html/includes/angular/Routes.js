@@ -34,6 +34,7 @@ OCEM.config(['$httpProvider', function ($httpProvider) {
 
 
 function indexCtrl($scope, $http, $firebase) {
+    $scope.clickedFeature = "";
     $scope.marker = false;
     $scope.url = '/data/durham-bike-lanes.geojson';
     var addedListener = false;
@@ -41,6 +42,8 @@ function indexCtrl($scope, $http, $firebase) {
     var count = 0;
 
     $('#pleaseWaitDialog').modal('show');
+    var routeInfo = $('#route_info');
+    routeInfo.dialog({ autoOpen: false, position: { my: "right bottom", at: "right-14 bottom-28", of: ".angular-google-map-container" } }); // Initialize dialog plugin
 
     $scope.map = {
         center: {latitude: 35.9886, longitude: -78.9072},
@@ -53,6 +56,7 @@ function indexCtrl($scope, $http, $firebase) {
                         map.data.addListener('addfeature', function (event) {
                             event.feature.setProperty("severity", "0");
                             event.feature.setProperty("severityCount", "0");
+                            event.feature.wrecks = [];
                             count++;
                         });
                     }
@@ -81,6 +85,7 @@ function indexCtrl($scope, $http, $firebase) {
                                                     $scope.highestWrecks = parseFloat(feature.getProperty('severityCount'));
                                                     $scope.highestWreckLoc = item;
                                                 }
+                                                feature.wrecks.push(item);
                                                 $scope.dataSet.push(item);
                                             }
                                         });
@@ -94,11 +99,15 @@ function indexCtrl($scope, $http, $firebase) {
                             });
 
                             map.data.addListener('click', function(event){
+                                $scope.clickedFeature = event.feature;
                                 var routeInfo = $('#route_info');
-                                routeInfo.dialog(); // Initialize dialog plugin
+                                $('.ui-dialog-titlebar-close').html("X");
                                 $('#wreck_count').text(event.feature.getProperty('severityCount'));
-                                //$('#speed_limit').text(event.feature
+                                routeInfo.dialog( "open" ); // Initialize dialog plugin
                                 console.log(event.feature);
+                                console.log($scope.clickedFeature);
+                                $scope.$apply();
+                                routeInfo.dialog( "option", "position", { my: "right bottom", at: "right-14 bottom-28", of: ".angular-google-map-container" } );
                             });
                             $scope.$apply();
                             console.log($scope.highestWrecks);
