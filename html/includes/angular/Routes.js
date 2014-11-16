@@ -34,7 +34,6 @@ OCEM.config(['$httpProvider', function ($httpProvider) {
 
 
 function indexCtrl($scope, $http, $firebase) {
-    $scope.map = { center: { latitude: 35.9886, longitude: -78.9072 }, zoom: 12 };
     $scope.dataSet = [];
     var ref = new Firebase("https://rideordie.firebaseio.com/");
     ref.once('value', function(snapshot){
@@ -47,15 +46,50 @@ function indexCtrl($scope, $http, $firebase) {
         console.log($scope.dataSet);
     });
 
+    $scope.url = '/data/durham-bike-lanes.geojson';
+    var addedListener = false;
+    var wasLoaded = false;
+    var count = 0;
 
+    $scope.map = {
+        center: {latitude: 35.9886, longitude: -78.9072},
+        zoom: 12,
+        events: {
+            tilesloaded: function (map) {
+                $scope.$apply(function () {
+                    $scope.mapInstance = map;
+                    if (!addedListener) {
+                        map.data.addListener('addfeature', function (event) {
+                            if (count % 5 == 0) {
+                                event.feature.setProperty("color", "red");
+                            } else {
+                                event.feature.setProperty("color", "green");
+                            }
+                            count++;
+                        });
+                    }
+                    if (!wasLoaded) {
+                        map.data.loadGeoJson($scope.url);
+                        wasLoaded = true;
+                    }
+                    setInterval(updateMap($scope.mapInstance), 5000);
+                });
+            }
+        }
+    }
+}
 
-
-
-
-//    var dataRef = ref.child('data');
-//    dataRef.once('child_added', function(snapshot){
-//        //console.log(snapshot.val());
-//    });
-    //$scope.data = theData;
+function updateMap(mapInstance) {
+    mapInstance.data.setStyle(function(feature) {
+        var color = 'gray';
+        if (feature.getProperty('color')) {
+            color = feature.getProperty('color');
+        }
+        return /** @type {google.maps.Data.StyleOptions} */({
+            fillColor: color,
+            strokeColor: color,
+            strokeWeight: 2
+        });
+    });
 }
 

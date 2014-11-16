@@ -3,8 +3,8 @@ module.exports = function (app) {
         res.render('layout');
     });
 
-    app.get('/Applications/:appName', function (req, res) {
-        res.render('layout');
+    app.get('/data/:fileName', function (req, res) {
+        res.sendfile('/data/' + req.params.fileName, {root: './html/src/'});
     });
 
     app.get('/partials/Index', function (req, res) {

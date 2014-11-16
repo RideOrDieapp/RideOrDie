@@ -24,7 +24,7 @@ html(lang="en")
         link(href="/stylesheets/Styles.css", rel="stylesheet")
 
         //-- Custom Fonts --
-        link(href="/font-awesome-4.1.0/css/font-awesome.min.css", rel="stylesheet", type="text/css")
+        link(href="/font-awesome-4.2.0/css/font-awesome.min.css", rel="stylesheet", type="text/css")
 
         //-- jQuery Version 1.11.0 --
         script(src="/scripts/jquery-1.11.1.min.js")
@@ -55,8 +55,10 @@ body(ng-app="RideOrDie")
             //-- Navigation --
             nav.navbar.navbar-default.navbar-static-top(role="navigation", style="margin-bottom: 0")
                 div.navbar-header
-                    a.navbar-brand(href="/")
-                        img.iconImage(src="/images/Bandwidth-75.png")
+                    a.navbar-brand.darkGrey(href="/")
+                        span.fa-stack.darkGrey.logoText.tiny-right-space
+                            i.fa.fa-square.fa-stack-2x
+                            i.fa.fa-bicycle.fa-stack-1x.fa-inverse
                         | #{title}
                 //-- end .navbar-header --
 

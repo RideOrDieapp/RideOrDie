@@ -3881,7 +3881,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   float: left;
   height: 75px;
   padding: 0px 20px;
-  font-size: 14px;
+  font-size: 20px;
   line-height: 75px;
   color: #63B1E5;
   font-family: "Avenir Light", Arial, sans-serif;
@@ -4095,10 +4095,10 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar-default {
   background-color: #F2F2F2;
-  border-color: #D1D1D1;
+  border-color: #888888;
 }
 .navbar-default .navbar-brand {
-  color: #ACACAF;
+  color: #4A4A4A;
 }
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {

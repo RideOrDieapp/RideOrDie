@@ -13,6 +13,14 @@
     src: url("/fonts/AvenirLTStd-Light.otf") format("opentype");
 }
 
+.darkGrey {
+    color: #4A4A4A;
+}
+
+.logoText {
+    font-size: 28px;
+}
+
 .angular-google-map-container {
     position: absolute;
     top: 75px;
@@ -35,6 +43,14 @@
 
 .small-left-space {
     margin-left:  20px;
+}
+
+.tiny-right-space {
+    margin-right:  10px;
+}
+
+.small-right-space {
+    margin-right:  20px;
 }
 
 .big-right-space {
