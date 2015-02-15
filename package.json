@@ -22,15 +22,6 @@
     }
   ],
   "main": "./server.js",
-  "dependencies": {
-    "express": "~3.1.0",
-    "nconf": "~0.6.7",
-    "q": "1.0.1",
-    "googlemaps": "0.1.20",
-    "firebase": "2.1.2",
-    "ejs": "1.0.0",
-    "jade": "1.9.2"
-  },
   "noAnalyze": true,
   "license": "Apache",
   "engines": {
@@ -38,5 +29,12 @@
   },
   "scripts": {
     "start": "node ./server.js"
+  },
+  "dependencies": {
+    "nconf": "~0.7.1",
+    "express": "~3.19.2",
+    "ejs": "~2.2.4",
+    "jade": "~1.9.2",
+    "firebase": "~2.2.0"
   }
 }
