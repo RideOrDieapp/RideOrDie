@@ -37,22 +37,18 @@ html(lang="en")
         //-- JQuery UI --
         script(src="/scripts/jquery-ui-1.11.2.custom/jquery-ui.js")
 
-
-
         //-- Moment version 2.8.3 --
         script(src="/scripts/moment.min.js")
-
-
-        //lodash for google maps
-        script(src="/scripts/lodash.min.js")
-
-
-        //script(src="//maps.googleapis.com/maps/api/js?libraries=weather,geometry,visualization,places&sensor=false&language=en&v=3.17")
 
         //Angular
         script(src="/scripts/angular.min.js")
         script(src="/scripts/angular-route.min.js")
-        script(src="/scripts/angular-google-maps.min.js")
+
+        //-- Leaflet --
+        link(href="/stylesheets/leaflet.css", rel="stylesheet")
+        script(src="/scripts/leaflet.js")
+        script(src="/scripts/angular-leaflet-directive.min.js")
+
         script(src="/angular/Routes.js")
 
         //Firebase

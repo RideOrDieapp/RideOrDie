@@ -1,7 +1,6 @@
-var OCEM = angular.module('RideOrDie', ['ngRoute', 'ui.bootstrap', 'ui.mask','firebase', 'google-maps'.ns()]);
+var OCEM = angular.module('RideOrDie', ['ngRoute', 'ui.bootstrap', 'ui.mask','firebase', 'leaflet-directive']);
 
-OCEM.controller('indexCtlr', ['$scope','$http','$firebase', indexCtrl]);
-
+OCEM.controller('indexCtlr', ['$scope','$http','$q',indexCtrl]);
 
 OCEM.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
@@ -30,10 +29,10 @@ OCEM.config(['$httpProvider', function ($httpProvider) {
             }
         };
     });
-}])
+}]);
 
 
-function indexCtrl($scope, $http, $firebase) {
+function indexCtrl($scope, $http, $firebase, $q) {
     $scope.clickedFeature = "";
     $scope.marker = false;
     $scope.url = '/data/durham-bike-lanes.geojson';
@@ -41,13 +40,32 @@ function indexCtrl($scope, $http, $firebase) {
     var wasLoaded = false;
     var count = 0;
 
-    $('#pleaseWaitDialog').modal('show');
+    $scope.center = {
+      lat: 35.9886,
+      lng: -78.9072,
+      zoom: 12
+    };
+    $scope.layers = {
+      baselayers: {
+        xyz: {
+          name: "CartoDB",
+          url: "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+          type: "xyz"
+        }
+      }
+    };
+    $scope.events = {
+      map: {
+        enable: [ 'mouseover' ]
+        logic: 'emit'
+      }
+    };
+
+    // $('#pleaseWaitDialog').modal('show');
     var routeInfo = $('#route_info');
     routeInfo.dialog({ autoOpen: false, position: { my: "right bottom", at: "right-14 bottom-28", of: ".angular-google-map-container" } }); // Initialize dialog plugin
 
     $scope.map = {
-        center: {latitude: 35.9886, longitude: -78.9072},
-        zoom: 12,
         events: {
             tilesloaded: function (map) {
                 $scope.$apply(function () {

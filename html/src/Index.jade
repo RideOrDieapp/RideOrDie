@@ -1,10 +1,4 @@
-div#map_canvas
-    ui-gmap-google-map(events='map.events' center='map.center' zoom='map.zoom')
-        ui-gmap-marker(ng-if="marker" ng-repeat="singleMarker in dataSet track by $index" idKey='singleMarker.objectid' coords="singleMarker.location")
-    div#map_options
-        h4.center Data Options
-        input#checkMarker(type="checkbox" ng-checked="marker" ng-model="marker")
-        label(for="checkMarker") Show wreck markers
+leaflet#map_canvas(center="center" layers="layers" event-broadcast="events")
 div#pleaseWaitDialog.modal.fade(data-backdrop="static" data-keyboard="false")
     div.modal-dialog
         div.modal-header

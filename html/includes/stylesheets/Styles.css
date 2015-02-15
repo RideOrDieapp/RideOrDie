@@ -26,26 +26,8 @@ label {
     vertical-align: 2px;
 }
 
-#map_options {
-    color: #FFFFFF;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #EEEEEE;
-    background: rgba(0,0,0,0.5);
-    position: absolute;
-    top: calc(2em + 75px);
-    right: 1em;
-    min-height: 100px;
-    width: 200px;
-
-}
-
-.angular-google-map-container {
-    position: absolute;
-    top: 75px;
-    bottom: 0;
-    right: 0;
-    left: 0;
+html,body,#map_canvas {
+  height: 100%;
 }
 
 .iconImage {
