@@ -164,7 +164,7 @@ function indexCtrl($scope, $http, $firebase, $q, leafletData) {
     });
 
     var deferred = $q.defer();
-    var ref = new Firebase("https://rideordie.firebaseio.com/");
+    var ref = new Firebase("https://bikesafety.firebaseio.com/Crashes");
     ref.once('value', function(snapshot){
         deferred.resolve(snapshot);
     });
@@ -181,26 +181,19 @@ function indexCtrl($scope, $http, $firebase, $q, leafletData) {
             arc.severityCount = 0;
         });
         $scope.highestWrecks = 0;
-        roads.forEach(function(arc) {
-            var arcFound = false;
-            arc.geometry.coordinates.forEach(function(point) {
-                dataset.forEach(function(accident) {
-                    var dist = calcCrow(
-                        +accident.latitude,
-                        +accident.longitude,
-                        point[1],
-                        point[0]);
-                    if (dist < 0.04572 && !arcFound) { //150 feet
-                        arcFound = true;
-                        arc.severityCount++;
-                        arc.wrecks.push(accident);
-                        if (arc.severityCount > $scope.highestWrecks) {
-                            $scope.highestWrecks = arc.severityCount;
-                            $scope.highestWreckLoc = accident;
-                        }
+        dataset.forEach(function (accident) {
+            if (accident.city.toString() == 'Durham' && accident.rd_ids) {
+                accident.rd_ids.forEach(function (road_id) {
+                    var currFeature = _.find(roads, function(r) { return r.id == road_id; });
+                    currFeature.severityCount++;
+                    currFeature.wrecks.push(accident);
+                    if (currFeature.severityCount > $scope.highestWrecks) {
+                        $scope.highestWrecks = currFeature.severityCount;
+                        $scope.highestWreckLoc = accident;
                     }
                 });
-            });
+
+            }
         });
     }).then(function() {
         L.d3SvgOverlay(function(selection, projection) {
@@ -216,26 +209,4 @@ function indexCtrl($scope, $http, $firebase, $q, leafletData) {
     });
 
     $('#modalStatus').text("Loading data...");
-}
-
-//This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
-function calcCrow(lat1, lon1, lat2, lon2)
-{
-    var R = 6371; // km
-    var dLat = toRad(lat2-lat1);
-    var dLon = toRad(lon2-lon1);
-    var lat1 = toRad(lat1);
-    var lat2 = toRad(lat2);
-
-    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    var d = R * c;
-    return d;
-}
-
-// Converts numeric degrees to radians
-function toRad(Value)
-{
-    return Value * Math.PI / 180;
 }
