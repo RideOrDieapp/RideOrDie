@@ -39,6 +39,11 @@ html,body,#map_canvas {
   float: left;
 }
 
+.roadsLegend {
+  margin-top: 10px;
+  clear: both;
+}
+
 .legend-line {
   clear: both;
 }
@@ -227,4 +232,7 @@ html,body,#map_canvas {
     content: url(/images/RIDEORDIE.PNG); /* no need for qoutes */
     display: block;
 }
+
+.bikepath {
+  fill: none;
 }
