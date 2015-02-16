@@ -33,15 +33,25 @@ OCEM.config(['$httpProvider', function ($httpProvider) {
     });
 }]);
 
-
 function indexCtrl($scope, $http, $firebase, $q, leafletData) {
-    $scope.clickedFeature = "";
-    $scope.marker = false;
+    $scope.keyToHumanReadables = {
+      bike_injur: { description: "Bicyclist Injury" },
+      bike_sex: { description: "Bicyclist Gender" },
+      ambulancer: { description: "Ambulance Called" },
+      bike_alc_d: { description: "Bicyclist Drunk" },
+      bike_pos: { description: "Bicyclist Location" },
+      bike_race: { description: "Bicyclist Race" },
+      drvr_alc_d: { description: "Driver Drunk" },
+      drvr_estsp: { description: "Driver Speed" },
+      drvr_injur: { description: "Driver Injury" },
+      drvr_race: { description: "Driver Race" },
+      drvr_sex: { description: "Driver Gender" },
+      weather: { description: "Weather" }
+    };
+    $scope.colorAccidentsBy = "bike_injur";
+
     $scope.wrecks = [];
     $scope.accident = null;
-    $scope.url = '/data/durham-bike-lanes.geojson';
-    var addedListener = false;
-    var count = 0;
 
     $scope.defaults = {
       scrollWheelZoom: false,
@@ -72,7 +82,87 @@ function indexCtrl($scope, $http, $firebase, $q, leafletData) {
 
     $('#pleaseWaitDialog').modal('show');
 
-    var dataset, roads;
+    var dataset, roads, map, d3projection, d3selection;
+    var updateMapFn = function(selection,projection) {
+        var category10 = d3.scale.category10();
+        // Trim the bike_injur field b/c some of the fields have " Injury"
+        // and others have "Injury".
+        var labels = d3.set(dataset.map(function(d) {
+            return $.trim(d[$scope.colorAccidentsBy]);
+        })).values();
+        var colors = _.map(labels, function(type) {
+          return category10(type);
+        });
+        d3.select('#legend .accidentLegend .rows')
+            .selectAll('div')
+            .remove();
+        d3.select('#legend .accidentLegend .rows')
+            .selectAll('div')
+            .data(labels)
+            .enter().append('div')
+            .html(function(d, i) {
+                return '<div class="legend-line"><div class="legend-circle inline" style="background-color:'+ colors[i] +'"></div><div class="legend-label inline">'+ d +'</div></div>';
+            });
+
+        var path = d3.geo.path().projection(function(coord) {
+            var latLng = new L.latLng(coord[1], coord[0]);
+            var p = projection.latLngToLayerPoint(latLng);
+            return [p.x,p.y];
+        });
+        var zoom = map.getZoom();
+        var widthScale = d3.scale.linear()
+            .domain([$scope.defaults.minZoom,$scope.defaults.maxZoom])
+            .range([3,0.5]);
+        var colorScale = d3.scale.linear()
+            .domain([0,1,$scope.highestWrecks])
+            .range(["#637939","#fd8d3c","#d62728"]);
+        selection.selectAll('.bikepath')
+            .data(roads, function(d) { return d.id; })
+            .attr('d',path)
+            .attr('stroke-width', widthScale(zoom) +'px')
+            .enter().append('svg:path')
+            .attr('d',path)
+            .attr('opacity', 0.6)
+            .attr('stroke', function(d, i) {
+                return colorScale(d.severityCount);
+            })
+            .attr('stroke-width', widthScale(zoom) +'px')
+            .on('mouseover', function(d) {
+              $scope.wrecks = d.wrecks;
+            })
+            .on('mouseout', function(d) {
+              $scope.wrecks = [];
+            })
+            .attr('class','bikepath');
+
+        // TODO color by...accident type, race, time of day.
+        var eachCircle = function(d) {
+            var p = projection.latLngToLayerPoint(L.latLng(d.latitude, d.longitude));
+            var s = d3.select(this);
+            s.attr('cx', p.x);
+            s.attr('cy', p.y);
+            s.attr('fill', function(d) { return category10($.trim(d[$scope.colorAccidentsBy])); });
+            s.attr('r', widthScale(zoom));
+        };
+        selection.selectAll('.accident')
+            .data(dataset, function(d) { return d.objectid; })
+            .each(eachCircle)
+            .enter().append('svg:circle')
+            .each(eachCircle)
+            .on('mouseover', function(d) {
+              $scope.accident = d;
+            })
+            .on('mouseout', function(d) {
+              $scope.accident = null;
+            })
+            .attr('class','accident');
+    };
+
+    $('#color_combo').change(function(el) {
+      $scope.colorAccidentsBy = $('#color_combo option:selected').val();
+      updateMapFn(d3selection, d3projection);
+    });
+
     var deferred = $q.defer();
     var ref = new Firebase("https://rideordie.firebaseio.com/");
     ref.once('value', function(snapshot){
@@ -84,7 +174,8 @@ function indexCtrl($scope, $http, $firebase, $q, leafletData) {
     }).then(function(result) {
         roads = topojson.feature(result.data,result.data.objects['durham-bike-lanes']).features;
         return leafletData.getMap('map_canvas');
-    }).then(function(map) {
+    }).then(function(leafletMap) {
+        map = leafletMap;
         roads.forEach(function(arc) {
             arc.wrecks = [];
             arc.severityCount = 0;
@@ -102,89 +193,23 @@ function indexCtrl($scope, $http, $firebase, $q, leafletData) {
                     if (dist < 0.04572 && !arcFound) { //150 feet
                         arcFound = true;
                         arc.severityCount++;
+                        arc.wrecks.push(accident);
                         if (arc.severityCount > $scope.highestWrecks) {
                             $scope.highestWrecks = arc.severityCount;
                             $scope.highestWreckLoc = accident;
                         }
-                        arc.wrecks.push(accident);
                     }
                 });
             });
         });
-        return map;
-    }).then(function(map) {
-        L.d3SvgOverlay(function(selection, projection) {
-            var category10 = d3.scale.category10();
-            // Trim the bike_injur field b/c some of the fields have " Injury"
-            // and others have "Injury".
-            var labels = d3.set(dataset.map(function(d) {
-                return $.trim(d.bike_injur);
-            })).values();
-            var colors = _.map(labels, function(injury) {
-              return category10(injury);
-            });
-            d3.select('#legend .accidentLegend .rows')
-                .selectAll('div')
-                .data(labels)
-                .enter().append('div')
-                .html(function(d, i) {
-                    return '<div class="legend-line"><div class="legend-circle inline" style="background-color:'+ colors[i] +'"></div><div class="legend-label inline">'+ d +'</div></div>';
-                });
-
-            var path = d3.geo.path().projection(function(coord) {
-                var latLng = new L.latLng(coord[1], coord[0]);
-                var p = projection.latLngToLayerPoint(latLng);
-                return [p.x,p.y];
-            });
-            var zoom = map.getZoom();
-            var widthScale = d3.scale.linear()
-                .domain([$scope.defaults.minZoom,$scope.defaults.maxZoom])
-                .range([3,0.5]);
-            var colorScale = d3.scale.linear()
-                .domain([0,1,$scope.highestWrecks])
-                .range(["#637939","#fd8d3c","#d62728"]);
-            selection.selectAll('.bikepath')
-                .data(roads, function(d) { return d.id; })
-                .attr('d',path)
-                .attr('stroke-width', widthScale(zoom) +'px')
-                .enter().append('svg:path')
-                .attr('d',path)
-                .attr('opacity', 0.6)
-                .attr('stroke', function(d, i) {
-                    return colorScale(d.severityCount);
-                })
-                .attr('stroke-width', widthScale(zoom) +'px')
-                .on('mouseover', function(d) {
-                  $scope.wrecks = d.wrecks;
-                })
-                .on('mouseout', function(d) {
-                  $scope.wrecks = [];
-                })
-                .attr('class','bikepath');
-
-            // TODO color by...accident type, race, time of day.
-            var eachCircle = function(d) {
-                var p = projection.latLngToLayerPoint(L.latLng(d.latitude, d.longitude));
-                var s = d3.select(this);
-                s.attr('cx', p.x);
-                s.attr('cy', p.y);
-                s.attr('fill', function(d) { return category10($.trim(d.bike_injur)); });
-                s.attr('r', widthScale(zoom));
-            };
-            selection.selectAll('.accident')
-                .data(dataset, function(d) { return d.objectid; })
-                .each(eachCircle)
-                .enter().append('svg:circle')
-                .each(eachCircle)
-                .on('mouseover', function(d) {
-                  $scope.accident = d;
-                })
-                .on('mouseout', function(d) {
-                  $scope.accident = null;
-                })
-                .attr('class','accident');
-        }).addTo(map);
     }).then(function() {
+        L.d3SvgOverlay(function(selection, projection) {
+          d3selection = selection;
+          d3projection = projection;
+          updateMapFn(d3selection, d3projection);
+        }).addTo(map);
+    })
+    .then(function() {
         $('#pleaseWaitDialog').modal('hide');
     }).catch(function(err) {
         console.error(err);
