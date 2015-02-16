@@ -84,24 +84,48 @@ function indexCtrl($scope, $http, $firebase, $q, leafletData) {
 
     var dataset, roads, map, d3projection, d3selection;
     var updateMapFn = function(selection,projection) {
-        var category10 = d3.scale.category10();
+        var categoryColors = d3.scale.category10();
         // Trim the bike_injur field b/c some of the fields have " Injury"
         // and others have "Injury".
-        var labels = d3.set(dataset.map(function(d) {
+        var accidentLabel = d3.set(dataset.map(function(d) {
             return $.trim(d[$scope.colorAccidentsBy]);
         })).values();
-        var colors = _.map(labels, function(type) {
-          return category10(type);
+        var accidentColor = _.map(accidentLabel, function(type) {
+          return categoryColors(type);
         });
+
+        var zoom = map.getZoom();
+        var widthScale = d3.scale.linear()
+            .domain([$scope.defaults.minZoom,$scope.defaults.maxZoom])
+            .range([3,0.5]);
+
+        var roadOpacity = d3.scale.linear()
+            .domain([0,$scope.highestWrecks])
+            .range([0.3,1]);
+        var roadColor = d3.scale.linear()
+            .domain([0,1,$scope.highestWrecks])
+            .range(["#637939","#fd8d3c","#d62728"]);
+
         d3.select('#legend .accidentLegend .rows')
             .selectAll('div')
             .remove();
         d3.select('#legend .accidentLegend .rows')
             .selectAll('div')
-            .data(labels)
+            .data(accidentLabel)
             .enter().append('div')
             .html(function(d, i) {
-                return '<div class="legend-line"><div class="legend-circle inline" style="background-color:'+ colors[i] +'"></div><div class="legend-label inline">'+ d +'</div></div>';
+                return '<div class="legend-line"><div class="legend-circle inline" style="background-color:'+ accidentColor[i] +'"></div><div class="legend-label inline">'+ d +'</div></div>';
+            });
+
+        d3.select('#legend .roadLegend .rows')
+            .selectAll('div')
+            .remove();
+        d3.select('#legend .roadLegend .rows')
+            .selectAll('div')
+            .data(d3.range($scope.highestWrecks+1))
+            .enter().append('div')
+            .html(function(d, i) {
+                return '<div class="legend-line"><div class="legend-circle inline" style="background-color:'+ roadColor(i) +';opacity:'+ roadOpacity(i) +'"></div><div class="legend-label inline">'+ i +'</div></div>';
             });
 
         var path = d3.geo.path().projection(function(coord) {
@@ -109,39 +133,13 @@ function indexCtrl($scope, $http, $firebase, $q, leafletData) {
             var p = projection.latLngToLayerPoint(latLng);
             return [p.x,p.y];
         });
-        var zoom = map.getZoom();
-        var widthScale = d3.scale.linear()
-            .domain([$scope.defaults.minZoom,$scope.defaults.maxZoom])
-            .range([3,0.5]);
-        var colorScale = d3.scale.linear()
-            .domain([0,1,$scope.highestWrecks])
-            .range(["#637939","#fd8d3c","#d62728"]);
-        selection.selectAll('.bikepath')
-            .data(roads, function(d) { return d.id; })
-            .attr('d',path)
-            .attr('stroke-width', widthScale(zoom) +'px')
-            .enter().append('svg:path')
-            .attr('d',path)
-            .attr('opacity', 0.6)
-            .attr('stroke', function(d, i) {
-                return colorScale(d.severityCount);
-            })
-            .attr('stroke-width', widthScale(zoom) +'px')
-            .on('mouseover', function(d) {
-              $scope.wrecks = d.wrecks;
-            })
-            .on('mouseout', function(d) {
-              $scope.wrecks = [];
-            })
-            .attr('class','bikepath');
 
-        // TODO color by...accident type, race, time of day.
         var eachCircle = function(d) {
             var p = projection.latLngToLayerPoint(L.latLng(d.latitude, d.longitude));
             var s = d3.select(this);
             s.attr('cx', p.x);
             s.attr('cy', p.y);
-            s.attr('fill', function(d) { return category10($.trim(d[$scope.colorAccidentsBy])); });
+            s.attr('fill', function(d) { return categoryColors($.trim(d[$scope.colorAccidentsBy])); });
             s.attr('r', widthScale(zoom));
         };
         selection.selectAll('.accident')
@@ -155,7 +153,29 @@ function indexCtrl($scope, $http, $firebase, $q, leafletData) {
             .on('mouseout', function(d) {
               $scope.accident = null;
             })
+            .attr('opacity', 0.6)
             .attr('class','accident');
+
+        selection.selectAll('.bikepath')
+            .data(roads, function(d) { return d.id; })
+            .attr('d',path)
+            .attr('stroke-width', widthScale(zoom) +'px')
+            .enter().append('svg:path')
+            .attr('d',path)
+            .attr('opacity', function(d, i) {
+                return roadOpacity(d.severityCount);
+            })
+            .attr('stroke', function(d, i) {
+                return roadColor(d.severityCount);
+            })
+            .attr('stroke-width', widthScale(zoom) +'px')
+            .on('mouseover', function(d) {
+              $scope.wrecks = d.wrecks;
+            })
+            .on('mouseout', function(d) {
+              $scope.wrecks = [];
+            })
+            .attr('class','bikepath');
     };
 
     $('#color_combo').change(function(el) {

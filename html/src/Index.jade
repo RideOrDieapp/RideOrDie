@@ -8,12 +8,12 @@ div#pleaseWaitDialog.modal.fade(data-backdrop="static" data-keyboard="false")
                 div.progress-bar.progress-bar-striped.active(role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%")
 div#legend(Title="Legend")
   div.accidentLegend
-    div.inline Color accidents by
+    div.inline Color by
     select#color_combo
       option(ng-repeat="(key,value) in keyToHumanReadables" value="{{key}}" ng-selected="{{colorAccidentsBy == key}}") {{keyToHumanReadables[key].description}}
     div.rows
-  div.roadsLegend
-    div Roads:
+  div.roadLegend
+    div # Accidents on Road:
     div.rows
   div#legend_detail
     table.table(ng-repeat="wreck in wrecks track by $index")
