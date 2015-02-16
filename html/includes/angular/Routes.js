@@ -64,36 +64,34 @@ function indexCtrl($scope, $http, $firebase) {
                         $('#modalStatus').text("Loading Bike Routes...");
                         map.data.loadGeoJson($scope.url);
 
+
+
                         $scope.dataSet = [];
                         $('#modalStatus').text("Retrieving & Processing Crash Data...");
-                        var ref = new Firebase("https://rideordie.firebaseio.com/");
+                        var ref = new Firebase("https://bikesafety.firebaseio.com/Crashes");
                         ref.once('value', function(snapshot){
                             var dataarray = snapshot.val();
                             $scope.highestWrecks = 0;
-                            dataarray.forEach(function(item){
-                                if(item.city.toString() == 'Durham') {
-                                    map.data.forEach(function(feature) {
 
-                                        var featureFound = false;
-                                        feature.getGeometry().getArray().forEach(function(coord) {
-                                            var dist = calcCrow(coord.lat(), coord.lng(), item.location.latitude, item.location.longitude);
-                                            if (dist < 0.04572 && !featureFound) { //150 feet
-                                                featureFound = true;
-                                                //console.log("Coord: " + coord.lat() + ", " + coord.lng() + "Coord2: " + item.location.latitude + ", " + item.location.longitude +" - Distance: " + dist);
-                                                feature.setProperty("severityCount", parseFloat(feature.getProperty('severityCount'))+1);
-                                                if (parseFloat(feature.getProperty('severityCount')) > $scope.highestWrecks) {
-                                                    $scope.highestWrecks = parseFloat(feature.getProperty('severityCount'));
-                                                    $scope.highestWreckLoc = item;
-                                                }
-                                                feature.wrecks.push(item);
-                                                $scope.dataSet.push(item);
-                                            }
-                                        });
+                            var featureMap = mapData(map.data);
 
-
+                            dataarray.forEach(function (item) {
+                                if (item.city.toString() == 'Durham' && item.rd_ids) {
+                                    item.rd_ids.forEach(function (road_id) {
+                                        var currFeature = featureMap[road_id];
+                                        currFeature.setProperty("severityCount", parseFloat(currFeature.getProperty('severityCount')) + 1);
+                                        if (parseFloat(currFeature.getProperty('severityCount')) > $scope.highestWrecks) {
+                                            $scope.highestWrecks = parseFloat(currFeature.getProperty('severityCount'));
+                                            $scope.highestWreckLoc = item;
+                                        }
+                                        currFeature.wrecks.push(item);
+                                        $scope.dataSet.push(item);
                                     });
+
                                 }
                             });
+
+
                             map.data.forEach(function(feature) {
                                 feature.setProperty("severity", parseFloat((feature.getProperty('severityCount'))/$scope.highestWrecks));
                             });
@@ -119,12 +117,24 @@ function indexCtrl($scope, $http, $firebase) {
 
                         wasLoaded = true;
                     }
-                    setInterval(updateMap($scope.mapInstance), 5000);
+                    updateMap($scope.mapInstance)
+                    //setInterval(updateMap($scope.mapInstance), 5000);
+
                 });
             }
         }
     }
     $('#modalStatus').text("Loading Google Maps...");
+}
+
+function mapData(features) {
+    var Map = {};
+
+    features.forEach(function(feature) {
+        Map[feature.k.OBJECTID_12] = feature;
+    });
+
+    return Map;
 }
 
 function updateMap(mapInstance) {
