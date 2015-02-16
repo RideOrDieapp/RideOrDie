@@ -40,6 +40,9 @@ function indexCtrl($scope, $http, $firebase, $q) {
     var wasLoaded = false;
     var count = 0;
 
+    $scope.defaults = {
+      scrollWheelZoom: false
+    };
     $scope.center = {
       lat: 35.9886,
       lng: -78.9072,
@@ -54,11 +57,10 @@ function indexCtrl($scope, $http, $firebase, $q) {
         }
       }
     };
-    $scope.events = {
-      map: {
-        enable: [ 'mouseover' ]
-        logic: 'emit'
-      }
+    $scope.legend = {
+      position: "bottomright",
+      colors: [ "#eee", "#888"],
+      labels: [ "First Thing", "Second Thing"]
     };
 
     // $('#pleaseWaitDialog').modal('show');
