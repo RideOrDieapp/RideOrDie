@@ -101,7 +101,7 @@ function indexCtrl($scope, $http, $firebase, $q, leafletData) {
 
         var roadOpacity = d3.scale.linear()
             .domain([0,$scope.highestWrecks])
-            .range([0.3,1]);
+            .range([Math.PI/4,1]);
         var roadColor = d3.scale.linear()
             .domain([0,1,$scope.highestWrecks])
             .range(["#637939","#fd8d3c","#d62728"]);

@@ -1,11 +1,12 @@
 leaflet#map_canvas(center="center" defaults="defaults" layers="layers")
 div#pleaseWaitDialog.modal.fade(data-backdrop="static" data-keyboard="false")
     div.modal-dialog
-        div.modal-header
-            h1#modalStatus Processing...
-        div.modal-body
-            div.progress
-                div.progress-bar.progress-bar-striped.active(role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%")
+        div.modal-content
+            div.modal-header
+                h1#modalStatus Processing...
+            div.modal-body
+                div.progress
+                    div.progress-bar.progress-bar-striped.active(role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%")
 div#legend(Title="Legend")
   div.accidentLegend
     div.inline Color by
