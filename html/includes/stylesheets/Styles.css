@@ -50,3 +50,7 @@ body {
 .bikepath {
   fill: none;
 }
+
+.btn:focus {
+  outline: none;
+}

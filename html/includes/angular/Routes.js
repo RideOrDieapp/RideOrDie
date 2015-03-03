@@ -1,53 +1,6 @@
-var OCEM = angular.module('RideOrDie', ['ngRoute', 'ui.bootstrap', 'ui.mask','firebase', 'leaflet-directive']);
-
-OCEM.constant('_',window._);
-
-OCEM.controller('indexCtlr', ['$scope','$http','$firebase','$q','leafletData',indexCtrl]);
-
-OCEM.config(['$routeProvider', '$locationProvider',
-    function($routeProvider, $locationProvider) {
-        $locationProvider.html5Mode(true);
-        $routeProvider
-        .when('/', {
-            templateUrl: '/partials/Index',
-            controller: 'indexCtlr'
-        })
-        .otherwise({
-            redirectTo: '/'
-        });
-  }]);
-
-OCEM.config(['$httpProvider', function ($httpProvider) {
-    $httpProvider.interceptors.push(function() {
-        return {
-            request: function(request) {
-                if (request.method === 'GET') {
-                    if (request.url.indexOf('.') === -1) {
-                        var sep = request.url.indexOf('?') === -1 ? '?' : '&';
-                        request.url = request.url + sep + 'cacheBust=' + new Date().getTime();
-                    }
-                }
-                return request;
-            }
-        };
-    });
-}]);
-
-function indexCtrl($scope, $http, $firebase, $q, leafletData) {
-    $scope.keyToHumanReadables = {
-      bike_injur: { description: "Bicyclist Injury" },
-      bike_sex: { description: "Bicyclist Gender" },
-      ambulancer: { description: "Ambulance Called" },
-      bike_alc_d: { description: "Bicyclist Drunk" },
-      bike_pos: { description: "Bicyclist Location" },
-      bike_race: { description: "Bicyclist Race" },
-      drvr_alc_d: { description: "Driver Drunk" },
-      drvr_estsp: { description: "Driver Speed" },
-      drvr_injur: { description: "Driver Injury" },
-      drvr_race: { description: "Driver Race" },
-      drvr_sex: { description: "Driver Gender" },
-      weather: { description: "Weather" }
-    };
+OCEM.controller('mapController', ['$scope','leafletData','getDataset', 'getPaths', 'datasetSettings',
+function ($scope, leafletData, getDataset, getPaths, datasetSettings) {
+    $scope.keyToHumanReadables = datasetSettings;
     $scope.colorAccidentsBy = "bike_injur";
 
     $scope.wrecks = [];
@@ -73,14 +26,13 @@ function indexCtrl($scope, $http, $firebase, $q, leafletData) {
       }
     };
 
+    // TODO change out to a leaflet control.
     var legend = $('#legend');
     legend.dialog({
         autoOpen: true,
         dialogClass: "no-close",
         position: { my: "right top", at: "right-14 top+14", of: "#map_canvas" }
     });
-
-    $('#pleaseWaitDialog').modal('show');
 
     var dataset, roads, map, d3projection, d3selection;
     var updateMapFn = function(selection,projection) {
@@ -183,14 +135,9 @@ function indexCtrl($scope, $http, $firebase, $q, leafletData) {
       updateMapFn(d3selection, d3projection);
     });
 
-    var deferred = $q.defer();
-    var ref = new Firebase("https://bikesafety.firebaseio.com/Crashes");
-    ref.once('value', function(snapshot){
-        deferred.resolve(snapshot);
-    });
-    deferred.promise.then(function(result) {
+    getDataset.then(function(result) {
         dataset = result.val();
-        return $http.get("/data/durham-bike-lanes.topojson");
+        return getPaths;
     }).then(function(result) {
         roads = topojson.feature(result.data,result.data.objects['durham-bike-lanes']).features;
         return leafletData.getMap('map_canvas');
@@ -221,12 +168,7 @@ function indexCtrl($scope, $http, $firebase, $q, leafletData) {
           d3projection = projection;
           updateMapFn(d3selection, d3projection);
         }).addTo(map);
-    })
-    .then(function() {
-        $('#pleaseWaitDialog').modal('hide');
     }).catch(function(err) {
         console.error(err);
     });
-
-    $('#modalStatus').text("Loading data...");
-}
+}]);

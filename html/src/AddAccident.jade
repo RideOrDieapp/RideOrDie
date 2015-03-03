@@ -1,0 +1,63 @@
+div.container-fluid
+    form
+        h2 Accident
+        div.form-group
+            div.checkbox
+                label
+                  input(type="checkbox")
+                  | {{ questions.ambulancer.description }}
+
+            label {{ questions.weather.description}}:
+            select.form-control
+                option(ng-repeat="v in questions.weather.options") {{v}}
+
+            label TODO time of day/year/etc
+            label TODO location
+
+        h2 Bicyclist
+        div.form-group
+            label {{ questions.bike_injur.description}}:
+            select.form-control
+                option(ng-repeat="v in questions.bike_injur.options") {{v}}
+
+            label {{ questions.bike_sex.description}}:
+            select.form-control
+                option(ng-repeat="v in questions.bike_sex.options") {{v}}
+
+            label {{ questions.bike_sex.description}}:
+            select.form-control
+                option(ng-repeat="v in questions.bike_sex.options") {{v}}
+
+            label {{ questions.bike_race.description}}:
+            select.form-control
+                option(ng-repeat="v in questions.bike_race.options") {{v}}
+
+            div.checkbox
+                label
+                  input(type="checkbox")
+                  | {{ questions.bike_alc_d.description }}
+
+
+        h2 Driver
+        div.form-group
+
+            label {{ questions.drvr_estsp.description}}:
+            select.form-control
+                option(ng-repeat="v in questions.drvr_estsp.options") {{v}}
+
+            label {{ questions.drvr_injur.description}}:
+            select.form-control
+                option(ng-repeat="v in questions.drvr_injur.options") {{v}}
+
+            label {{ questions.drvr_race.description}}:
+            select.form-control
+                option(ng-repeat="v in questions.drvr_race.options") {{v}}
+
+            label {{ questions.drvr_sex.description}}:
+            select.form-control
+                option(ng-repeat="v in questions.drvr_sex.options") {{v}}
+
+            div.checkbox
+                label
+                  input(type="checkbox")
+                  | {{ questions.drvr_alc_d.description }}

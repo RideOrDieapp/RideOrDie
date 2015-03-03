@@ -48,24 +48,33 @@ html(lang="en")
         script(src="/scripts/L.D3SvgOverlay.min.js")
         script(src="/bower/angular-leaflet-directive/dist/angular-leaflet-directive.min.js")
 
+        script(src="/angular/app.js")
         script(src="/angular/Routes.js")
+        script(src="/angular/AddAccident.js")
 
         //Firebase
         script(src="/bower/firebase/firebase.js")
         script(src="/bower/angularfire/dist/angularfire.min.js")
 
-body(ng-app="RideOrDie")
-    nav.navbar.navbar-fixed-top
+body(ng-app="BikeSafety")
+    nav.navbar.navbar-default.navbar-fixed-top
         div.container-fluid
             div.navbar-header
                 a.navbar-brand Bike Safety
-            div.collapse.navbar-collapse.navbar-right
-                ul.nav.navbar-nav
-                    li
-                        a
-                          i.glyphicon.glyphicon-pencil.black &nbsp;Add Accident
+            form.navbar-form.navbar-right(ng-controller="headerController")
+                button.btn.btn-default(ng-click="togglePage()")
+                    i.glyphicon.glyphicon-pencil.black &nbsp; {{ label }}
 
     div.container
+        div#pleaseWaitDialog.modal.fade(data-backdrop="static" data-keyboard="false")
+            div.modal-dialog
+                div.modal-content
+                    div.modal-header
+                        h1#modalStatus Processing...
+                    div.modal-body
+                        div.progress
+                            div.progress-bar.progress-bar-striped.active(role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%")
+
         ng-view
 
     script(src="/bower/bootstrap/dist/js/bootstrap.min.js")

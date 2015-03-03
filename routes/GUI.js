@@ -3,6 +3,10 @@ module.exports = function (app) {
         res.render('layout');
     });
 
+    app.get('/addAccident', function (req, res) {
+        res.render('layout');
+    });
+
     app.get('/data/:fileName', function (req, res) {
         res.sendfile('/data/' + req.params.fileName, {root: './html/src/'});
     });
