@@ -1,63 +1,76 @@
 div.container-fluid
-    form
-        h2 Accident
-        div.form-group
-            div.checkbox
-                label
-                  input(type="checkbox")
-                  | {{ questions.ambulancer.description }}
+    div.row
+        div.panel.panel-default
+            div.panel-body
+                form
+                    div.row
+                        div.col-md-4
+                            div.panel.panel-default
+                                div.panel-heading
+                                    h2.panel-title Accident
+                                div.panel-body
+                                    div.form-group
+                                        div.checkbox
+                                            label
+                                              input(type="checkbox")
+                                              | {{ questions.ambulancer.description }}
 
-            label {{ questions.weather.description}}:
-            select.form-control
-                option(ng-repeat="v in questions.weather.options") {{v}}
+                                        label {{ questions.weather.description}}:
+                                        select.form-control
+                                            option(ng-repeat="v in questions.weather.options") {{v}}
 
-            label TODO time of day/year/etc
-            label TODO location
+                                        label TODO time of day/year/etc
+                                        label TODO location
+                        div.col-md-4
+                            div.panel.panel-default
+                                div.panel-heading
+                                    h2.panel-title Bicyclist
+                                div.panel-body
+                                    div.form-group
+                                        label {{ questions.bike_injur.description}}:
+                                        select.form-control
+                                            option(ng-repeat="v in questions.bike_injur.options") {{v}}
 
-        h2 Bicyclist
-        div.form-group
-            label {{ questions.bike_injur.description}}:
-            select.form-control
-                option(ng-repeat="v in questions.bike_injur.options") {{v}}
+                                        label {{ questions.bike_sex.description}}:
+                                        select.form-control
+                                            option(ng-repeat="v in questions.bike_sex.options") {{v}}
 
-            label {{ questions.bike_sex.description}}:
-            select.form-control
-                option(ng-repeat="v in questions.bike_sex.options") {{v}}
+                                        label {{ questions.bike_race.description}}:
+                                        select.form-control
+                                            option(ng-repeat="v in questions.bike_race.options") {{v}}
 
-            label {{ questions.bike_sex.description}}:
-            select.form-control
-                option(ng-repeat="v in questions.bike_sex.options") {{v}}
+                                        div.checkbox
+                                            label
+                                              input(type="checkbox")
+                                              | {{ questions.bike_alc_d.description }}
+                        div.col-md-4
+                            div.panel.panel-default
+                                div.panel-heading
+                                    h2.panel-title Driver
+                                div.panel-body
+                                    div.form-group
 
-            label {{ questions.bike_race.description}}:
-            select.form-control
-                option(ng-repeat="v in questions.bike_race.options") {{v}}
+                                        label {{ questions.drvr_injur.description}}:
+                                        select.form-control
+                                            option(ng-repeat="v in questions.drvr_injur.options") {{v}}
 
-            div.checkbox
-                label
-                  input(type="checkbox")
-                  | {{ questions.bike_alc_d.description }}
+                                        label {{ questions.drvr_sex.description}}:
+                                        select.form-control
+                                            option(ng-repeat="v in questions.drvr_sex.options") {{v}}
 
+                                        label {{ questions.drvr_race.description}}:
+                                        select.form-control
+                                            option(ng-repeat="v in questions.drvr_race.options") {{v}}
 
-        h2 Driver
-        div.form-group
+                                        label {{ questions.drvr_estsp.description}}:
+                                        select.form-control
+                                            option(ng-repeat="v in questions.drvr_estsp.options") {{v}}
 
-            label {{ questions.drvr_estsp.description}}:
-            select.form-control
-                option(ng-repeat="v in questions.drvr_estsp.options") {{v}}
-
-            label {{ questions.drvr_injur.description}}:
-            select.form-control
-                option(ng-repeat="v in questions.drvr_injur.options") {{v}}
-
-            label {{ questions.drvr_race.description}}:
-            select.form-control
-                option(ng-repeat="v in questions.drvr_race.options") {{v}}
-
-            label {{ questions.drvr_sex.description}}:
-            select.form-control
-                option(ng-repeat="v in questions.drvr_sex.options") {{v}}
-
-            div.checkbox
-                label
-                  input(type="checkbox")
-                  | {{ questions.drvr_alc_d.description }}
+                                        div.checkbox
+                                            label
+                                              input(type="checkbox")
+                                              | {{ questions.drvr_alc_d.description }}
+            div.panel-footer
+                div.row
+                    div.col-xs-12
+                        button.btn.btn-primary(type="submit" ng-click="addAccident()") Add Accident
