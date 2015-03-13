@@ -3,16 +3,24 @@ div.panel.panel-default#legend(Title="Legend")
   div.panel-heading
     h3.panel-title Legend
   div.panel-body
-    div.accidentLegend
-      div.inline Color by&nbsp;&nbsp;
+    div(ng-controller="pathController")
+      input(type="checkbox" ng-change="change()" ng-model="showRoad")
+      | Show Paths
+      div.roadLegend(ng-show="showRoad")
+        div # Accidents on Road:
+        div.rows
+        hr
+    div(ng-controller="crashesController")
+      div.inline Color accidents by&nbsp;&nbsp;
       select#color_combo
         option(ng-repeat="(key,value) in keyToHumanReadables" value="{{key}}" ng-selected="{{colorAccidentsBy == key}}") {{keyToHumanReadables[key].description}}
       hr
-      div.rows
-    div.roadLegend
-      div # Accidents on Road:
-      hr
-      div.rows
+
+      input(type="checkbox" ng-change="change()" ng-model="showCrashes")
+      | Show Crashes
+      div.accidentLegend
+        div.rows
+        hr
     div#legend_detail
       table.table(ng-repeat="wreck in wrecks track by $index")
           tr.table-striped

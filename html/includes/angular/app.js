@@ -6,7 +6,7 @@ OCEM.config(['$routeProvider', '$locationProvider', function($routeProvider, $lo
     $locationProvider.html5Mode(true);
     $routeProvider
     .when('/', {
-        templateUrl: '/partials/Routes',
+        templateUrl: '/partials/MainMap',
         controller: 'mapController'
     })
     .when('/addAccident', {
