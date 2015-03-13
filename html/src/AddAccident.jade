@@ -1,76 +1,78 @@
 div.container-fluid
-    div.row
-        div.panel.panel-default
-            div.panel-body
-                form
-                    div.row
-                        div.col-md-4
-                            div.panel.panel-default
-                                div.panel-heading
-                                    h2.panel-title Accident
-                                div.panel-body
-                                    div.form-group
-                                        div.checkbox
-                                            label
-                                              input(type="checkbox")
-                                              | {{ questions.ambulancer.description }}
+  div.row
+    div.panel.panel-default
+      div.panel-body
+        form
+          div.row
+            div.col-md-4
+              div.panel.panel-default
+                div.panel-heading
+                  h2.panel-title Accident
+                div.panel-body
+                  div.form-group
+                    div.checkbox
+                      label
+                        input(type="checkbox" ng-model="ambulancer")
+                        | {{ questions.ambulancer.description }}
 
-                                        label {{ questions.weather.description}}:
-                                        select.form-control
-                                            option(ng-repeat="v in questions.weather.options") {{v}}
+                    label {{ questions.weather.description}}:
+                    select.form-control(ng-model="weather")
+                      option(ng-repeat="v in questions.weather.options") {{v}}
 
-                                        label TODO time of day/year/etc
-                                        label TODO location
-                        div.col-md-4
-                            div.panel.panel-default
-                                div.panel-heading
-                                    h2.panel-title Bicyclist
-                                div.panel-body
-                                    div.form-group
-                                        label {{ questions.bike_injur.description}}:
-                                        select.form-control
-                                            option(ng-repeat="v in questions.bike_injur.options") {{v}}
+                    label Accident Location:
+                    leaflet#pick_location(center="center" layers="layers" markers="markers")
 
-                                        label {{ questions.bike_sex.description}}:
-                                        select.form-control
-                                            option(ng-repeat="v in questions.bike_sex.options") {{v}}
+                    div TODO time of day/year/etc
+            div.col-md-4
+              div.panel.panel-default
+                div.panel-heading
+                  h2.panel-title Bicyclist
+                div.panel-body
+                  div.form-group
+                    label {{ questions.bike_injur.description}}:
+                    select.form-control(ng-model="bike_injur")
+                      option(ng-repeat="v in questions.bike_injur.options") {{v}}
 
-                                        label {{ questions.bike_race.description}}:
-                                        select.form-control
-                                            option(ng-repeat="v in questions.bike_race.options") {{v}}
+                    label {{ questions.bike_sex.description}}:
+                    select.form-control(ng-model="bike_sex")
+                      option(ng-repeat="v in questions.bike_sex.options") {{v}}
 
-                                        div.checkbox
-                                            label
-                                              input(type="checkbox")
-                                              | {{ questions.bike_alc_d.description }}
-                        div.col-md-4
-                            div.panel.panel-default
-                                div.panel-heading
-                                    h2.panel-title Driver
-                                div.panel-body
-                                    div.form-group
+                    label {{ questions.bike_race.description}}:
+                    select.form-control(ng-model="bike_race")
+                      option(ng-repeat="v in questions.bike_race.options") {{v}}
 
-                                        label {{ questions.drvr_injur.description}}:
-                                        select.form-control
-                                            option(ng-repeat="v in questions.drvr_injur.options") {{v}}
+                    div.checkbox
+                      label
+                        input(type="checkbox" ng-model="bike_alc_d")
+                        | {{ questions.bike_alc_d.description }}
+            div.col-md-4
+              div.panel.panel-default
+                div.panel-heading
+                  h2.panel-title Driver
+                div.panel-body
+                  div.form-group
 
-                                        label {{ questions.drvr_sex.description}}:
-                                        select.form-control
-                                            option(ng-repeat="v in questions.drvr_sex.options") {{v}}
+                    label {{ questions.drvr_injur.description}}:
+                    select.form-control(ng-model="drvr_injur")
+                      option(ng-repeat="v in questions.drvr_injur.options") {{v}}
 
-                                        label {{ questions.drvr_race.description}}:
-                                        select.form-control
-                                            option(ng-repeat="v in questions.drvr_race.options") {{v}}
+                    label {{ questions.drvr_sex.description}}:
+                    select.form-control(ng-model="drvr_sex")
+                      option(ng-repeat="v in questions.drvr_sex.options") {{v}}
 
-                                        label {{ questions.drvr_estsp.description}}:
-                                        select.form-control
-                                            option(ng-repeat="v in questions.drvr_estsp.options") {{v}}
+                    label {{ questions.drvr_race.description}}:
+                    select.form-control(ng-model="drvr_race")
+                      option(ng-repeat="v in questions.drvr_race.options") {{v}}
 
-                                        div.checkbox
-                                            label
-                                              input(type="checkbox")
-                                              | {{ questions.drvr_alc_d.description }}
-            div.panel-footer
-                div.row
-                    div.col-xs-12
-                        button.btn.btn-primary(type="submit" ng-click="addAccident()") Add Accident
+                    label {{ questions.drvr_estsp.description}}:
+                    select.form-control(ng-model="drvr_estsp")
+                      option(ng-repeat="v in questions.drvr_estsp.options") {{v}}
+
+                    div.checkbox
+                      label
+                        input(type="checkbox" ng-model="drvr_alc_d")
+                        | {{ questions.drvr_alc_d.description }}
+      div.panel-footer
+        div.row
+          div.col-xs-12
+            button.btn.btn-primary(type="submit" ng-click="addAccident()") Add Accident

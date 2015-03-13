@@ -1,5 +1,5 @@
-OCEM.controller('mapController', ['$scope','leafletData','getDataset', 'getPaths', 'datasetSettings',
-function ($scope, leafletData, getDataset, getPaths, datasetSettings) {
+OCEM.controller('mapController', ['$scope','leafletData','getCrashes', 'getPaths', 'datasetSettings',
+function ($scope, leafletData, getCrashes, getPaths, datasetSettings) {
     $scope.keyToHumanReadables = datasetSettings;
     $scope.colorAccidentsBy = "bike_injur";
 
@@ -130,7 +130,7 @@ function ($scope, leafletData, getDataset, getPaths, datasetSettings) {
       updateMapFn(d3selection, d3projection);
     });
 
-    getDataset.then(function(result) {
+    getCrashes.then(function(result) {
         dataset = result.val();
         return getPaths;
     }).then(function(result) {

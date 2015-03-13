@@ -20,6 +20,7 @@ OCEM.config(['$routeProvider', '$locationProvider', function($routeProvider, $lo
 
 OCEM.service('datasetSettings', function() {
     var injuries = [
+        "Unknown",
         "O: No Injury",
         "A: Disabling Injury",
         "B: Evident Injury",
@@ -27,13 +28,14 @@ OCEM.service('datasetSettings', function() {
         "K: Killed"
     ];
     var races = [
+        "Unknown",
         "Asian",
         "Black",
         "Hispanic",
         "White",
         "Other"
     ];
-    var genders = [ "Female", "Male" ];
+    var genders = [ "Unknown", "Female", "Male" ];
     return {
         bike_injur: {
             description: "Bicyclist Injury",
@@ -69,6 +71,7 @@ OCEM.service('datasetSettings', function() {
             description: "Driver Speed",
             type: "list",
             options: [
+                "Unknown",
                 "0-5 mph",
                 "6-10 mph",
                 "11-15 mph",
@@ -102,6 +105,7 @@ OCEM.service('datasetSettings', function() {
             description: "Weather",
             type: "list",
             options: [
+                "Unknown",
                 "Clear",
                 "Cloudy",
                 "Rain"
@@ -114,12 +118,26 @@ OCEM.service('getPaths', function($http) {
     return $http.get("/data/durham-bike-lanes.topojson");
 });
 
-OCEM.service('getDataset', function($q, $firebase) {
+OCEM.service('getCrashes', function($q, $firebase) {
     $('#pleaseWaitDialog').modal('show');
     var deferred = $q.defer();
     var ref = new Firebase("https://bikesafety.firebaseio.com/Crashes");
     ref.once('value', function(snapshot){
         deferred.resolve(snapshot);
+        $('#pleaseWaitDialog').modal('hide');
+    });
+    return deferred.promise;
+});
+
+OCEM.service('getCrashesUserSubmitted', function($q, $firebase) {
+    $('#pleaseWaitDialog').modal('show');
+    var deferred = $q.defer();
+    var ref = new Firebase("https://bikesafety.firebaseio.com/CrashesUserSubmitted");
+    ref.once('value', function(snapshot){
+        deferred.resolve({
+          data: snapshot,
+          db: ref
+        });
         $('#pleaseWaitDialog').modal('hide');
     });
     return deferred.promise;
