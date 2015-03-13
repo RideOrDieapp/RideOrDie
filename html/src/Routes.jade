@@ -1,34 +1,39 @@
 leaflet#map_canvas(center="center" defaults="defaults" layers="layers" legend="legend")
-div.leaflet-right#legend(Title="Legend")
-  div.accidentLegend
-    div.inline Color by
-    select#color_combo
-      option(ng-repeat="(key,value) in keyToHumanReadables" value="{{key}}" ng-selected="{{colorAccidentsBy == key}}") {{keyToHumanReadables[key].description}}
-    div.rows
-  div.roadLegend
-    div # Accidents on Road:
-    div.rows
-  div#legend_detail
-    table.table(ng-repeat="wreck in wrecks track by $index")
-        tr.table-striped
-            th Wreck:
-            th {{$index+1}}
-        tr.table-striped
-            td Wreck Time:
-            td#speed_limit {{wreck.crash_time}}
-        tr.table-striped
-            td Speed:
-            td#speed_limit {{wreck.drvr_estsp}} ({{wreck.speed_limi}} limit)
-        tr.table-striped
-            td Alc. Involved:
-            td#speed_limit {{wreck.crashalcoh}}
-    table.table(ng-show="accident")
-        tr.table-striped
-            th Accident:
-            th {{accident.bike_injur}}
-        tr.table-striped
-            td Wreck Time:
-            td#speed_limit {{accident.crash_time}}
-        tr.table-striped
-            td Age/Race/Gender:
-            td#speed_limit {{accident.bike_age}}/{{accident.bike_sex}}/{{accident.bike_race}}
+div.panel.panel-default#legend(Title="Legend")
+  div.panel-heading
+    h3.panel-title Legend
+  div.panel-body
+    div.accidentLegend
+      div.inline Color by&nbsp;&nbsp;
+      select#color_combo
+        option(ng-repeat="(key,value) in keyToHumanReadables" value="{{key}}" ng-selected="{{colorAccidentsBy == key}}") {{keyToHumanReadables[key].description}}
+      hr
+      div.rows
+    div.roadLegend
+      div # Accidents on Road:
+      hr
+      div.rows
+    div#legend_detail
+      table.table(ng-repeat="wreck in wrecks track by $index")
+          tr.table-striped
+              th Wreck:
+              th {{$index+1}}
+          tr.table-striped
+              td Wreck Time:
+              td#speed_limit {{wreck.crash_time}}
+          tr.table-striped
+              td Speed:
+              td#speed_limit {{wreck.drvr_estsp}} ({{wreck.speed_limi}} limit)
+          tr.table-striped
+              td Alc. Involved:
+              td#speed_limit {{wreck.crashalcoh}}
+      table.table(ng-show="accident")
+          tr.table-striped
+              th Accident:
+              th {{accident.bike_injur}}
+          tr.table-striped
+              td Wreck Time:
+              td#speed_limit {{accident.crash_time}}
+          tr.table-striped
+              td Age/Race/Gender:
+              td#speed_limit {{accident.bike_age}}/{{accident.bike_sex}}/{{accident.bike_race}}

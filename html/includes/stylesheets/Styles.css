@@ -19,6 +19,13 @@ body {
   float: left;
 }
 
+#legend {
+  position: absolute;
+  z-index: 1000;
+  top: 70px;
+  right: 20px;
+  background: white;
+}
 .roadLegend {
   padding-top: 20px;
   clear: both;

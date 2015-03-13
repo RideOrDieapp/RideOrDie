@@ -26,13 +26,7 @@ function ($scope, leafletData, getDataset, getPaths, datasetSettings) {
       }
     };
 
-    // TODO change out to a leaflet control.
     var legend = $('#legend');
-    legend.dialog({
-        autoOpen: true,
-        dialogClass: "no-close",
-        position: { my: "right top", at: "right-14 top+14", of: "#map_canvas" }
-    });
 
     var dataset, roads, map, d3projection, d3selection;
     var updateMapFn = function(selection,projection) {
@@ -94,6 +88,7 @@ function ($scope, leafletData, getDataset, getPaths, datasetSettings) {
             s.attr('fill', function(d) { return categoryColors($.trim(d[$scope.colorAccidentsBy])); });
             s.attr('r', widthScale(zoom));
         };
+        // TODO fade in with a transition() when the data is added
         selection.selectAll('.accident')
             .data(dataset, function(d) { return d.objectid; })
             .each(eachCircle)
