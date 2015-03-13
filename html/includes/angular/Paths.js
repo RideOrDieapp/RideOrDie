@@ -16,7 +16,7 @@ function ($scope, leafletData, getPaths) {
                 arc.severityCount = 0;
             });
             $scope.highestWrecks = 0;
-            $scope.dataset.forEach(function (accident) {
+            $scope.crashes.forEach(function (accident) {
                 if (accident.city.toString() == 'Durham' && accident.rd_ids) {
                     accident.rd_ids.forEach(function (road_id) {
                         var currFeature = _.find(roads, function(r) { return r.id == road_id; });
@@ -76,9 +76,7 @@ function ($scope, leafletData, getPaths) {
     };
     $scope.showRoad = true;
     $scope.$watch('leafletLoaded', function(newValue, oldValue) {
-        if (!newValue) {
-            return;
-        }
+        if (!newValue) { return; }
         $scope.change();
     });
 }]);

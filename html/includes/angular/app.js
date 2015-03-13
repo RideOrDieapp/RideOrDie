@@ -123,7 +123,7 @@ OCEM.service('getCrashes', function($q, $firebase) {
     var deferred = $q.defer();
     var ref = new Firebase("https://bikesafety.firebaseio.com/Crashes");
     ref.once('value', function(snapshot){
-        deferred.resolve(snapshot);
+        deferred.resolve(snapshot.val());
         $('#pleaseWaitDialog').modal('hide');
     });
     return deferred.promise;
@@ -135,7 +135,7 @@ OCEM.service('getCrashesUserSubmitted', function($q, $firebase) {
     var ref = new Firebase("https://bikesafety.firebaseio.com/CrashesUserSubmitted");
     ref.once('value', function(snapshot){
         deferred.resolve({
-          data: snapshot,
+          data: _.values(snapshot.val()),
           db: ref
         });
         $('#pleaseWaitDialog').modal('hide');
