@@ -2,3 +2,5 @@
 /.idea
 /iisnode
 node_modules
+html/includes/bower
+*.swp
